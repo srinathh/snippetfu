@@ -1,0 +1,14 @@
+{
+    "name":"snippet-fu-electron",
+    "main":"main.js",
+    "window":{
+        "resizable":false,
+        "fullscreen":false,
+        "width":400,
+        "height":600,
+        "max_width":400,
+        "max_height":600,
+        "min_width":400,
+        "min_height":600
+    }
+}
