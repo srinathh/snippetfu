@@ -55,7 +55,7 @@ class PresApp extends Component {
 }
 
 function copySnippet(snippet){
-    clipboard.writeText('Example String')
+    clipboard.writeText(snippet.text)
     //clipboard.set(snippet.text);
     console.log("copying snippet with key:".concat(snippet.snippetKey).concat(" text:").concat(snippet.text))
 }

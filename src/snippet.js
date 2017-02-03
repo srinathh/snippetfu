@@ -9,13 +9,13 @@ class Snippet extends React.Component{
                     <Tooltip label="Click text to copy">
                         <div 
                             onClick={()=>{this.props.copySnippet(this.props.snippet)}}
-                            style={{fontFamily:"monospace"}}>
+                            style={{fontFamily:"monospace", width:320, overflowWrap:"break-word"}}>
                             {this.props.snippet.text}
                         </div>
                     </Tooltip>
                 </ListItemContent>
                 <ListItemAction>
-                    <Icon name="delete" onClick={()=>this.props.delSnippet(this.props.snippet)}/>
+                    <Icon style={{width:32}} name="delete" onClick={()=>this.props.delSnippet(this.props.snippet)}/>
                 </ListItemAction>
             </ListItem>
         )
