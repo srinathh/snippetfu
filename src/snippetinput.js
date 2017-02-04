@@ -13,7 +13,7 @@ class SnippetInput extends React.Component {
     }
 
     render() {
-        const fabTop = window.innerHeight - 80;
+        const fabTop = window.innerHeight - 140;
         const fabLeft = window.innerWidth - 80;
 
         return (

@@ -7,13 +7,24 @@ const url = require('url')
 let win
 
 function createWindow () {
+    const electron = require('electron');
+    var display = electron.screen.getPrimaryDisplay();
+    const scrWidth = display.size.width;
+    const scrHeight = display.size.height;
+    const winWidth = Math.floor(scrWidth/3)
+    const winHeight = Math.floor(scrHeight*3/4)
+
+    // devTools set to false
     // Create the browser window.
     win = new BrowserWindow({
-        width: 400, 
-        height: 600, 
+        width: winWidth, 
+        height: winHeight, 
+        x: scrWidth-winWidth,
+        y: scrHeight-winHeight,
         resizable:false, 
         fullscreenable:false,
         title:"Snippet-Fu",
+        frame:false
     })
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -23,7 +34,7 @@ function createWindow () {
     }))
 
   // Open the DevTools.
-    //win.webContents.openDevTools()
+    win.webContents.openDevTools()
     win.setMenu(null)
     // Emitted when the window is closed.
     win.on('closed', () => {

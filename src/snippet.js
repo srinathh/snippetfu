@@ -3,13 +3,14 @@ import {ListItem, ListItemContent, ListItemAction, Icon, Tooltip} from 'react-md
 
 class Snippet extends React.Component{
     render(){
+        const txtWidth = window.innerWidth-32-16*3;
         return(
             <ListItem style={{background:this.props.background}}>
                 <ListItemContent>
                     <Tooltip label="Click text to copy">
                         <div 
                             onClick={()=>{this.props.copySnippet(this.props.snippet)}}
-                            style={{fontFamily:"monospace", width:320, overflowWrap:"break-word"}}>
+                            style={{fontFamily:"monospace", width:txtWidth, overflowWrap:"break-word"}}>
                             {this.props.snippet.text}
                         </div>
                     </Tooltip>

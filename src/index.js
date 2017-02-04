@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {List} from 'react-mdl'
+import {List, Icon} from 'react-mdl'
 import Snippet from './snippet'
 import SnippetInput from './snippetinput'
 import {createStore} from 'redux'
 import {newSnippet, reducer, addSnippet, delSnippet, initSnippets} from './store'
+import {Layout, Header, Navigation, Drawer, Content} from 'react-mdl'
 //const clipboard = window.nw.Clipboard.get()
 import {initdata} from './initdata'
 import {connect, Provider} from 'react-redux'
@@ -16,8 +17,6 @@ const path = window.require('path');
 const {clipboard} = window.require('electron')
 const {app} = window.require('electron').remote;
 
-
-
 let snippetsFilePath = path.join(app.getPath("documents"),"snippet-fu.json")
 initdata.push(newSnippet("Your snippets will be saved in:"))
 initdata.push(newSnippet(snippetsFilePath))
@@ -25,7 +24,6 @@ initdata.push(newSnippet(snippetsFilePath))
 class PresApp extends Component {
     render() {
         let snippets = []
-
         for(let j=0; j < this.props.snippets.length; j++){
             let background = "#E3F2FD" 
             if(j%2===0){
@@ -40,15 +38,35 @@ class PresApp extends Component {
                     snippet={this.props.snippets[j]} />
             )
         }        
-
+        const ht = window.innerHeight - 56; 
         return (
             <div>
-                <SnippetInput addSnippet={this.props.addSnippet}/>
-                <div style={{overflowY:"auto", height:"600px"}}   >
-                    <List style={{margin:0, padding:0 }} >
-                        {snippets}
-                    </List>
-                </div>
+                <Layout fixedHeader>
+                    <Header  
+                        title={<span style={{webkitAppRegion: "drag"}}><strong>Snippet-Fu</strong></span>}>
+                        <Navigation>
+                            <Icon 
+                                name="clear"
+                                style={{webkitAppRegion:"no-drag", cursor:"pointer"}}
+                                onClick={()=>{window.close()}}
+                            />
+                        </Navigation>
+                    </Header>
+                    <Drawer title={<span><strong>Snippet-Fu</strong></span>}>
+                        <Navigation>
+                            <div>Export</div>
+                            <div>About</div>
+                        </Navigation>
+                    </Drawer>
+                    <Content>
+                        <SnippetInput addSnippet={this.props.addSnippet}/>
+                        <div style={{overflowY:"auto", height:ht}}   >
+                            <List style={{margin:0, padding:0 }} >
+                                {snippets}
+                            </List>
+                        </div>
+                    </Content>
+                </Layout>
             </div>
         );
     }
