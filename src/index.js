@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 import React, { Component } from 'react';
-import {List, Icon} from 'react-mdl'
+import {List, Icon, Snackbar} from 'react-mdl'
 import Snippet from './snippet'
 import SnippetInput from './snippetinput'
 import {createStore} from 'redux'
@@ -34,13 +34,29 @@ import AboutDialog from './about'
 const path = window.require('path');
 const {clipboard} = window.require('electron')
 const {app} = window.require('electron').remote;
-const {dialog} = window.require('electron').remote
+//const {dialog} = window.require('electron').remote
 
 let snippetsFilePath = path.join(app.getPath("userData"),"snippet-fu.json")
 initdata.push(newSnippet("Your snippets will be saved in:"))
 initdata.push(newSnippet(snippetsFilePath))
 
 class PresApp extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { isSnackbarActive: false, snackbarMessage:"" };
+        this.showSnackBar = this.showSnackBar.bind(this);
+        this.hideSnackBar = this.hideSnackBar.bind(this);
+        this.copySnippet = this.copySnippet.bind(this);
+    }
+
+    hideSnackBar(){
+        this.setState({isSnackbarActive:false, snackbarMessage:""})
+    }
+
+    showSnackBar(text) {
+        this.setState({isSnackbarActive:true, snackbarMessage:text})
+    }
+
     render() {
         let snippets = []
         for(let j=0; j < this.props.snippets.length; j++){
@@ -72,15 +88,7 @@ class PresApp extends Component {
                     </Header>
                     <Drawer title={<span><strong>Snippet-Fu</strong></span>}>
                         <Navigation>
-                            <div
-                                onClick={()=>{
-                                    dialog.showSaveDialog({title:"Save snippets to..."},(filename)=>{
-                                        if(filename){
-                                            saveSnippets(filename, store.getState().snippets,null);
-                                        }
-                                        console.log("save in filename:".concat(filename))
-                                    })
-                                }}>
+                            <div onClick={()=>{ console.log("export snippets function TBD")}}>
                                 Export...</div>
                             <AboutDialog />
                         </Navigation>
@@ -93,12 +101,18 @@ class PresApp extends Component {
                             </List>
                         </div>
                     </Content>
+                    <Snackbar
+                        active={this.state.isSnackbarActive}
+                        onTimeout={this.hideSnackBar}>
+                        {this.state.snackbarMessage}
+                    </Snackbar>
                 </Layout>
         );
     }
 
     copySnippet(snippet){
         clipboard.writeText(snippet.text)
+        this.showSnackBar("Copied to clipboard")
         //clipboard.set(snippet.text);
         console.log("copying snippet with key:".concat(snippet.snippetKey).concat(" text:").concat(snippet.text))
     }
