@@ -58,23 +58,29 @@ class PresApp extends Component {
     }
 
     render() {
+
         let snippets = []
         for(let j=0; j < this.props.snippets.length; j++){
-            let background = "#E3F2FD" 
+
+            // set different colors for odd & even list items
+            let background = "#E3F2FD"  // Blue 50 in Material Design
             if(j%2===0){
-                background = "#FFFFFF" 
+                background = "#BBDEFB" // Blue 100 in Material Design 
             }
+
             snippets.push(
                 <Snippet 
                     key={this.props.snippets[j].snippetKey} 
                     copySnippet={this.copySnippet} 
                     delSnippet={this.props.delSnippet} 
                     background={background}
+                    snippetWidth={window.innerWidth}
                     snippet={this.props.snippets[j]} />
             )
         }        
 
-        const ht = window.innerHeight - 56; 
+        // THe appbar is 56 pixels tall
+        const ht = window.innerHeight - 56;
         return (
                 <Layout fixedHeader>
                     <Header  

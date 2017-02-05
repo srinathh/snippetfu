@@ -21,17 +21,17 @@ import {ListItem, ListItemContent, ListItemAction, Icon, Tooltip} from 'react-md
 
 class Snippet extends React.Component{
     render(){
-        const txtWidth = window.innerWidth-32-16*3;
+        // we reserve 32 pixels for the icon & there are 3 partitions of 16 
+        // pixels each by default in the listitem
+        const txtWidth = this.props.snippetWidth-32-16*3;
         return(
             <ListItem style={{background:this.props.background}}>
                 <ListItemContent>
-                    <Tooltip label="Click text to copy">
-                        <div 
-                            onClick={()=>{this.props.copySnippet(this.props.snippet)}}
-                            style={{fontFamily:"monospace", width:txtWidth, overflowWrap:"break-word"}}>
-                            {this.props.snippet.text}
-                        </div>
-                    </Tooltip>
+                    <div 
+                        onClick={()=>{this.props.copySnippet(this.props.snippet)}}
+                        style={{fontFamily:"monospace", width:txtWidth, overflowWrap:"break-word"}}>
+                        {this.props.snippet.text}
+                    </div>
                 </ListItemContent>
                 <ListItemAction>
                     <Icon style={{width:32}} name="delete" onClick={()=>this.props.delSnippet(this.props.snippet)}/>
@@ -48,7 +48,8 @@ Snippet.propTypes = {
     snippet : React.PropTypes.shape({
         text: React.PropTypes.string.isRequired,
         snippetKey: React.PropTypes.string.isRequired
-    })
+    }),
+    snippetWidth: React.PropTypes.number.isRequired
 }
 
 export default Snippet;
