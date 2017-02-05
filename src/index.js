@@ -23,7 +23,6 @@ import SnippetInput from './snippetinput'
 import {createStore} from 'redux'
 import {newSnippet, reducer, addSnippet, delSnippet, initSnippets} from './store'
 import {Layout, Header, Navigation, Drawer, Content} from 'react-mdl'
-//const clipboard = window.nw.Clipboard.get()
 import {initdata} from './initdata'
 import {connect, Provider} from 'react-redux'
 import ReactDOM from 'react-dom';
@@ -31,9 +30,11 @@ import './index.css';
 import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
 import {loadSnippets, saveSnippets} from './persist'
+import AboutDialog from './about'
 const path = window.require('path');
 const {clipboard} = window.require('electron')
 const {app} = window.require('electron').remote;
+const {dialog} = window.require('electron').remote
 
 let snippetsFilePath = path.join(app.getPath("userData"),"snippet-fu.json")
 initdata.push(newSnippet("Your snippets will be saved in:"))
@@ -50,30 +51,38 @@ class PresApp extends Component {
             snippets.push(
                 <Snippet 
                     key={this.props.snippets[j].snippetKey} 
-                    copySnippet={this.props.copySnippet} 
+                    copySnippet={this.copySnippet} 
                     delSnippet={this.props.delSnippet} 
                     background={background}
                     snippet={this.props.snippets[j]} />
             )
         }        
+
         const ht = window.innerHeight - 56; 
         return (
-            <div>
                 <Layout fixedHeader>
                     <Header  
                         title={<span style={{webkitAppRegion: "drag"}}><strong>Snippet-Fu</strong></span>}>
                         <Navigation>
-                            <Icon 
-                                name="clear"
-                                style={{webkitAppRegion:"no-drag", cursor:"pointer"}}
-                                onClick={()=>{window.close()}}
-                            />
+                            <Icon
+                                name="clear" 
+                                style={{webkitAppRegion:"no-drag", cursor:"pointer"}} 
+                                onClick={()=>{window.close()}} />
                         </Navigation>
                     </Header>
                     <Drawer title={<span><strong>Snippet-Fu</strong></span>}>
                         <Navigation>
-                            <div>Export</div>
-                            <div>About</div>
+                            <div
+                                onClick={()=>{
+                                    dialog.showSaveDialog({title:"Save snippets to..."},(filename)=>{
+                                        if(filename){
+                                            saveSnippets(filename, store.getState().snippets,null);
+                                        }
+                                        console.log("save in filename:".concat(filename))
+                                    })
+                                }}>
+                                Export...</div>
+                            <AboutDialog />
                         </Navigation>
                     </Drawer>
                     <Content>
@@ -85,21 +94,18 @@ class PresApp extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div>
         );
+    }
+
+    copySnippet(snippet){
+        clipboard.writeText(snippet.text)
+        //clipboard.set(snippet.text);
+        console.log("copying snippet with key:".concat(snippet.snippetKey).concat(" text:").concat(snippet.text))
     }
 }
 
-function copySnippet(snippet){
-    clipboard.writeText(snippet.text)
-    //clipboard.set(snippet.text);
-    console.log("copying snippet with key:".concat(snippet.snippetKey).concat(" text:").concat(snippet.text))
-}
-
-
 const mapStateToProps = (state) => {
     return {
-        copySnippet: copySnippet,
         snippets: state.snippets
     }
 }

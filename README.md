@@ -20,8 +20,8 @@ but with [sun-setting](https://blog.chromium.org/2016/08/from-chrome-apps-to-web
 of the Chrome Apps platform for Windows and Linux, it is released
 as a stand-alone app based on [Electron](http://electron.atom.io/).
 
-Development Flow
-----------------
+Building and Running
+--------------------
 This project is based on [Electron](http://electron.atom.io/)
 and built using [React](https://facebook.github.io/react/)
 components. It uses [Create React App](https://github.com/facebookincubator/create-react-app)
@@ -49,6 +49,15 @@ the app and development is mentioned below.
   ```
   electron build
   ```
+Development Notes 
+------------------
+- For development, should uncomment this line in `main.js` to show dev tools
+  ```
+  // win.webContents.openDevTools()
+  ```
+- In a number of places, you may see `window.require()`. This is to prevent 
+  conflict between NodeJS `require()` that is used by webpack in create-react-app 
+  and `require()` supported by Electron at runtime.
 
 License
 -------

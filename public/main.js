@@ -42,7 +42,7 @@ function createWindow () {
         resizable:false, 
         fullscreenable:false,
         title:"Snippet-Fu",
-        frame:false
+        frame:false,
     })
     // and load the index.html of the app.
     win.loadURL(url.format({
