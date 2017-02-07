@@ -1,6 +1,6 @@
 {
-  "name": "snippet-fu-nw",
-  "version": "0.1.0",
+  "name": "snippet-fu",
+  "version": "0.0.5",
   "private": true,
   "homepage": "./",
   "devDependencies": {

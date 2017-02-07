@@ -20,8 +20,9 @@ import React, { Component } from 'react';
 import {List, Icon, Snackbar} from 'react-mdl'
 import Snippet from './snippet'
 import SnippetInput from './snippetinput'
+import MenuItemDialog from './menuitemdialog'
 import {createStore} from 'redux'
-import {newSnippet, reducer, addSnippet, delSnippet, initSnippets} from './store'
+import {hideToast, showToast, newSnippet, reducer, addSnippet, delSnippet, initSnippets} from './store'
 import {Layout, Header, Navigation, Drawer, Content} from 'react-mdl'
 import {initdata} from './initdata'
 import {connect, Provider} from 'react-redux'
@@ -35,26 +36,15 @@ const path = window.require('path');
 const {clipboard} = window.require('electron')
 const {app} = window.require('electron').remote;
 //const {dialog} = window.require('electron').remote
+var crypto = window.require('crypto')
 
 let snippetsFilePath = path.join(app.getPath("userData"),"snippet-fu.json")
-initdata.push(newSnippet("Your snippets will be saved in:"))
-initdata.push(newSnippet(snippetsFilePath))
 
 class PresApp extends Component {
     constructor(props) {
         super(props);
-        this.state = { isSnackbarActive: false, snackbarMessage:"" };
-        this.showSnackBar = this.showSnackBar.bind(this);
-        this.hideSnackBar = this.hideSnackBar.bind(this);
+        this.state = { isSnackbarActive: false };
         this.copySnippet = this.copySnippet.bind(this);
-    }
-
-    hideSnackBar(){
-        this.setState({isSnackbarActive:false, snackbarMessage:""})
-    }
-
-    showSnackBar(text) {
-        this.setState({isSnackbarActive:true, snackbarMessage:text})
     }
 
     render() {
@@ -94,9 +84,8 @@ class PresApp extends Component {
                     </Header>
                     <Drawer title={<span><strong>Snippet-Fu</strong></span>}>
                         <Navigation>
-                            <div onClick={()=>{ console.log("export snippets function TBD")}}>
-                                Export...</div>
-                            <AboutDialog />
+                            <MenuItemDialog key="datapath" menuItem="Data path" dialogContent={snippetsFilePath} />  
+                            <AboutDialog key="about" />
                         </Navigation>
                     </Drawer>
                     <Content>
@@ -108,9 +97,9 @@ class PresApp extends Component {
                         </div>
                     </Content>
                     <Snackbar
-                        active={this.state.isSnackbarActive}
-                        onTimeout={this.hideSnackBar}>
-                        {this.state.snackbarMessage}
+                        active={this.props.toast.show}
+                        onTimeout={this.props.hideToast}>
+                        {this.props.toast.text}
                     </Snackbar>
                 </Layout>
         );
@@ -118,15 +107,24 @@ class PresApp extends Component {
 
     copySnippet(snippet){
         clipboard.writeText(snippet.text)
-        this.showSnackBar("Copied to clipboard")
+        this.props.showToast("Copied to clipboard")
         //clipboard.set(snippet.text);
         console.log("copying snippet with key:".concat(snippet.snippetKey).concat(" text:").concat(snippet.text))
     }
 }
 
+function snippetStoreSig(snippets){
+    var hash = crypto.createHash('md5')
+    snippets.forEach((snippet)=>{
+        hash.update(snippet.snippetKey)
+    })
+    return hash.digest('hex')
+}
+
 const mapStateToProps = (state) => {
     return {
-        snippets: state.snippets
+        snippets: state.snippets,
+        toast: state.toast
     }
 }
 
@@ -137,6 +135,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         delSnippet: (snippet) => {
             dispatch(delSnippet(snippet))
+        },
+        showToast: (text) => {
+            dispatch(showToast(text))
+        },
+        hideToast: () => {
+            dispatch(hideToast())
         }
     }
 }
@@ -147,33 +151,42 @@ const App = connect(
 )(PresApp)
 
 let store = createStore(reducer)
+ReactDOM.render(
+    <Provider store={store}>
+    <App />
+    </Provider>,
+    document.getElementById('root')
+);
 
+let prevSig = snippetStoreSig(store.getState().snippets) 
 
-
-loadSnippets(snippetsFilePath, initdata, (err, snippets)=>{
-    if(err){
-        console.log("error in loadSnippets from ".concat(snippetsFilePath).concat(" : Using default values"))
-        console.log(err)
-    }
+try{
+    let snippets= loadSnippets(snippetsFilePath)
     store.dispatch(initSnippets(snippets))
 
     store.subscribe(()=>{
-        console.log(store.getState());
-        saveSnippets(snippetsFilePath, store.getState().snippets, (err)=>{
-            if(err){
-                console.log("error in saving snippets to ".concat(snippetsFilePath))
-                console.log(err)
-            }else{
-                console.log("successfully saved snippets to ".concat(snippetsFilePath))
-            }
-        });
-    })
+        let curState = store.getState()
+        let newSig = snippetStoreSig(curState.snippets)
+        console.log(curState);
 
-    ReactDOM.render(
-        <Provider store={store}>
-            <App />
-        </Provider>,
-    document.getElementById('root')
-    );
+        // persist data only if snippet store signature has changed
+        if(prevSig !== newSig){
+            saveSnippets(snippetsFilePath, curState.snippets, (err)=>{
+                if(err){
+                    store.dispatch(showToast("Error saving:".concat(err)))
+                    console.log("error in saving snippets to ".concat(snippetsFilePath))
+                    console.log(err)
+                }else{
+                    store.dispatch(showToast("Saved successfully."))
+                    console.log("successfully saved snippets to ".concat(snippetsFilePath))
+                }
+            });
+            prevSig = newSig
+        }
+    })    
+}catch (err){
+    console.log(err)
+    store.dispatch(showToast(err))
+}
 
-}) 
+

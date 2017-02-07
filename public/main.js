@@ -43,7 +43,8 @@ function createWindow () {
         fullscreenable:false,
         title:"Snippet-Fu",
         frame:false,
-        backgroundColor:"#E3F2FD"
+        backgroundColor:"#E3F2FD",
+        devTools: false
     })
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -53,7 +54,7 @@ function createWindow () {
     }))
 
   // Open the DevTools.
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
     win.setMenu(null)
     // Emitted when the window is closed.
     win.on('closed', () => {

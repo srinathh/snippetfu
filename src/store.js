@@ -20,11 +20,26 @@ const uuidV4 = require('uuid/v4');
 const ADD_SNIPPET = 'ADD_SNIPPET'
 const DEL_SNIPPET = 'DEL_SNIPPET'
 const INIT_SNIPPETS = 'INIT_SNIPPETS'
+const SHOW_TOAST = 'SHOW_TOAST'
+const HIDE_TOAST = 'HIDE_TOAST'
 
 export function newSnippet(text){
     return {
         text: text,
         snippetKey: uuidV4() 
+    }
+}
+
+export function showToast(text){
+    return {
+        type: SHOW_TOAST,
+        text: text
+    }
+}
+
+export function hideToast(){
+    return {
+        type: HIDE_TOAST
     }
 }
 
@@ -50,7 +65,11 @@ export function delSnippet(snippet) {
 }
 
 const initialState = {
-    snippets:[]
+    snippets:[],
+    toast:{
+        show:false,
+        text:""
+    }
 }
 
 export function reducer(state = initialState, action){
@@ -74,6 +93,20 @@ export function reducer(state = initialState, action){
             })
             return Object.assign({}, state,{
                 snippets:[ ...newList ]
+            })
+        case SHOW_TOAST:
+            return Object.assign({},state,{
+                toast:{
+                    show:true,
+                    text: action.text
+                }
+            })
+        case HIDE_TOAST:
+            return Object.assign({},state,{
+                toast:{
+                    show:false,
+                    text:"" 
+                }
             })
         default:
             return state
