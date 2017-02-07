@@ -160,10 +160,10 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-let prevSig = snippetStoreSig(store.getState().snippets) 
 
 try{
     let snippets= loadSnippets(snippetsFilePath)
+    let prevSig = snippetStoreSig(snippets) 
     store.dispatch(initSnippets(snippets))
 
     store.subscribe(()=>{
