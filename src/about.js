@@ -3,7 +3,6 @@ import MenuItemDialog from './menuitemdialog'
 
 class AboutDialog extends React.Component {
     render() {
-
         let content = (
             <div>
                 <p> Snippet-Fu, Copyright (C) 2017, Hariharan Srinath</p>

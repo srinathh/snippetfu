@@ -38,7 +38,13 @@ export function loadSnippets(filepath){
             throw "Error creating data file:".concat(filepath).concat(" : ").concat(e.message)
         }
 
-        return Object.assign({},initData)
+        let ret = initData.map((snippet)=>{
+            return Object.assign({},snippet)
+        })
+        console.log("creating new file")
+        console.log(ret)
+        return ret
+
     }
 
     // now we have the data, let's parse JSON

@@ -76,10 +76,12 @@ class PresApp extends Component {
                     <Header  
                         title={<span style={{webkitAppRegion: "drag"}}><strong>Snippet-Fu</strong></span>}>
                         <Navigation>
+                            <strong>
                             <Icon
                                 name="clear" 
                                 style={{webkitAppRegion:"no-drag", cursor:"pointer"}} 
                                 onClick={()=>{window.close()}} />
+                            </strong>
                         </Navigation>
                     </Header>
                     <Drawer title={<span><strong>Snippet-Fu</strong></span>}>
