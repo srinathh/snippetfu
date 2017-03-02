@@ -15,10 +15,17 @@ The snippets are stored as a plain JSON file in your local
 data folder and the program has simple options to export your
 data. Do not save passwords in Snippet-Fu.
 
+History
+-------
 Snippet-Fu was originally released as a [Chrome app](https://chrome.google.com/webstore/detail/snippet-fu/goekbdcfildilcmmlodpfemnjlkjajco?hl=en)
 but with [sun-setting](https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html)
 of the Chrome Apps platform for Windows and Linux, it is released
 as a stand-alone app based on [Electron](http://electron.atom.io/).
+
+Screenshots
+-----------
+![Snippet-Fu screenshot](screenshot.png)
+
 
 Building and Running
 --------------------
