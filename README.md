@@ -46,8 +46,10 @@ the app and development is mentioned below.
 - Install all the development components and libraries through
   ```
   cd snippetfu
+  
   npm install 
   ```
+  
 - Build the project using react-scripts
   ```
   npm run build
