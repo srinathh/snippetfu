@@ -1,19 +1,26 @@
 Snippet-Fu
 ==========
 Snippet-Fu lets you store and copy frequently used snippets
-of text quickly. All data is stored offline in your own computer
-and absolutely nothing is tracked or communicated over the
-network. 
+of text quickly by copying to clipboard with just one click.
+All data is stored offline in your own computer and absolutely
+nothing is tracked or communicated over the network. 
 
-Unlike storing in text files or notes, Snippet-Fu will copy
-the text to clipboard with one click and doesn't require you
-to select it first removing chances of over-typing and errors. 
-Unlike clipboard managers, it will only keep what you explicitly
+In analytics, development or even business, we often have to
+repeatedly re-use long or complicated text like command lines, 
+database connection strings etc. Using ad-hoc solutions like
+text editors or note-taking apps to store these is fidgety
+due to having to select the text to copy to clipboard and
+error-prone due to risk of accidental overtyping.
+
+Snippet-Fu prioritizes simple finding and re-use of text
+by simply clicking on the stored text and has a search
+function to quickly find what you are looking for. Unlike
+clipboard managers, it will only keep what you explicitly
 put into it and won't monitor your clipboard.
 
 The snippets are stored as a plain JSON file in your local
-data folder and the program has simple options to export your
-data. Do not save passwords in Snippet-Fu.
+data folder. Click the information icon to see the location
+where the file is stored. Do not save passwords in Snippet-Fu.
 
 History
 -------
@@ -27,18 +34,15 @@ Screenshots
 ![Snippet-Fu screenshot](screenshot.png)
 
 
-Building and Running
---------------------
-This project is based on [Electron](http://electron.atom.io/)
-and built using [React](https://facebook.github.io/react/)
-components. It uses [Create React App](https://github.com/facebookincubator/create-react-app)
-to bootstrap the react components. The workflow for building
-the app and development is mentioned below.
+Building
+--------
+This project is based on [Electron](http://electron.atom.io/) with 
+[Electron Builder](https://www.electron.build/), [React](https://facebook.github.io/react/)
+and [Material Components for Web](https://github.com/material-components/material-components-web-react/). It uses [Create React App](https://github.com/facebookincubator/create-react-app)
+to bootstrap the react components and a modified version of the workflow
+explained in [Kitze's blog]((https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3)
+to integrate CRA with Electron.
 
-- Make sure Electron is installed in your system
-  ```
-  npm install -g electron
-  ```
 - Clone the repository into a suitable location on the drive
   ```
   git clone https://github.com/srinathh/snippetfu.git
@@ -47,26 +51,26 @@ the app and development is mentioned below.
   ```
   cd snippetfu
   
-  npm install 
+  yarn 
   ```
   
-- Build the project using react-scripts
+- To devlop locally, run the following yarn script
   ```
-  npm run build
+  yarn electron-dev
   ```
-- Run electron on the build directory
+
+- To build the packed application, use the following script which calls `electron-builder`
+  and packs executables for Linux, Mac & Windows. The Linux build is well tested, 
+  Windows builds lightly tested & Mac un-tested. Testers & contributors welcome!
   ```
-  electron build
+  yarn electron-pack -mwl
   ```
-Development Notes 
+
+Changes from Version 1
 ------------------
-- For development, should uncomment this line in `main.js` to show dev tools
-  ```
-  // win.webContents.openDevTools()
-  ```
-- In a number of places, you may see `window.require()`. This is to prevent 
-  conflict between NodeJS `require()` that is used by webpack in create-react-app 
-  and `require()` supported by Electron at runtime.
+- Integrated workflow between Electron & React
+- New UI library - official React adapters of Material Components for Web
+- Simpler architecture & fewer dependencies - specifically no more use of Redux
 
 License
 -------
