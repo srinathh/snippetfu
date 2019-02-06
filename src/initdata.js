@@ -17,9 +17,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 export var initData = [
-    {snippetKey:"be0ed1fb-6d66-4836-8885-094a088319eb", text:"This is a snippet. Click on the it to copy its text to clipboard."},
-    {snippetKey:"6a91c45e-6230-47e0-bfcb-9e813321dbee", text:"Add new snippets by clicking the plus icon below."},
-    {snippetKey:"427c0f93-0721-4e5d-aac9-f8dfb1e21663", text:"Delete snippets by clicking on the delete icon to the right."},
-    {snippetKey:"c65f0ffa-ee5f-4a1c-9210-743580f8da26", text:"Avoid storing passwords & similar sensitive info in Snippet-Fu."},
-    {snippetKey:"50059f82-3cb6-4af5-b745-be933ba133de", text:"To see where your raw data is stored, select Data Path from the menu panel."  }
+    {title:"Introduction", subtitle:"This is the snippet text. Click to copy to clipboard."},
+    {title:"This is the Title", subtitle:"Titles are not part of snippets. They are just labels"},
+    {title:"Snippet can be any length", subtitle:"You can save really long texts into SnippetFu and retreive them with simply a click on the snippet."},
+    {title:"Adding a snippet", subtitle:"Click the plus button below."},
+    {title:"Deleting a snippet", subtitle:"Click the delete icon to its right."},
+    {title:"CAUTION", subtitle:"NEVER STORE PASSWORDS HERE!"},
 ]

@@ -15,36 +15,37 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
+
 import {initData} from './initdata'
-import {newSnippet} from './store'
-
+const path = window.require('path');
 const fs = window.require('fs');
+const {app} = window.require('electron').remote;
+export let snippetsFilePath = path.join(app.getPath("userData"),"snippet-fu-v2.json")
 
-export function loadSnippets(filepath){
+export function loadSnippets(){
     let data = ""
     try{
-        data = fs.readFileSync(filepath, 'utf8')
+        data = fs.readFileSync(snippetsFilePath, 'utf8')
     }
     catch(err){
-        // if the error was a "file not found" which is coded by ENOENT, perhaps its the first
-        // execution of the program and we can create it. Otherwise, we can't handle it & throw it
+        // if the error was something other than "file not found" (ENOENT), we will return
         if(err.code !== 'ENOENT'){
-            throw "Error reading data file:".concat(filepath).concat(" : ").concat(err.message)
+            return {data:[], err:"Error reading data file:".concat(snippetsFilePath).concat(" : ").concat(err.message)}
         }
 
+        // if the error was "file not found" which is coded by ENOENT, perhaps its the first
+        // execution of the program and we can try to create it with initdata. If successful
+        // we will simply return initdata
         try{
-            fs.writeFileSync(filepath, JSON.stringify(initData),{encoding:"utf8"})
+            fs.writeFileSync(snippetsFilePath, JSON.stringify(initData),{encoding:"utf8"})
         }catch(e){
-            throw "Error creating data file:".concat(filepath).concat(" : ").concat(e.message)
+            return {data:[], err: "Error creating data file:".concat(snippetsFilePath).concat(" : ").concat(e.message)}
         }
 
         let ret = initData.map((snippet)=>{
             return Object.assign({},snippet)
         })
-        console.log("creating new file")
-        console.log(ret)
-        return ret
-
+        return {data:ret, err:null}
     }
 
     // now we have the data, let's parse JSON
@@ -52,24 +53,25 @@ export function loadSnippets(filepath){
     try{
         parsedData = JSON.parse(data)
     }catch(err){
-        throw "File ".concat(filepath).concat(" exists but data is corrupted. ").concat(err.message).concat(". Check manually or delete file to start fresh.")
+        return {data:[],err:"File ".concat(snippetsFilePath).concat(" exists but data is corrupted. ").concat(err.message).concat(". Check manually or delete file to start fresh.")}
     }
 
     // now let's check that it's an array
     if(!Array.isArray(parsedData)){
-        throw "File ".concat(filepath).concat(" found but data corrupted: Missing snippet array. Check manually or delete file to start fresh.")
+        return {data:[],err: "File ".concat(snippetsFilePath).concat(" found but data corrupted: Missing snippet array. Check manually or delete file to start fresh.")}
     }
 
     // then let's check it's got a snippetKey and a text field defined
     if(!parsedData.every(snippet=>{
-        return 'snippetKey' in snippet && 'text' in snippet                 
+        return 'title' in snippet && 'subtitle' in snippet                 
     })){
-        throw "File ".concat(filepath).concat(" found but data corrupted: Some fields missing snippetKey and/or text fields. Check manually or delete file to start fresh.")
+        return {data:[],err: "File ".concat(snippetsFilePath).concat(" found but data corrupted: Some fields missing snippetKey and/or text fields. Check manually or delete file to start fresh.")}
     }
 
-    return parsedData
+    return {data:parsedData,err:null}
+
 }
 
-export function saveSnippets(filepath, snippets, callback){
-    fs.writeFile(filepath, JSON.stringify(snippets, null, 4), callback)
+export function saveSnippets(snippets, callback){
+    fs.writeFile(snippetsFilePath, JSON.stringify(snippets, null, 4), callback)
 }

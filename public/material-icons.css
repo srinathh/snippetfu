@@ -1,40 +1,36 @@
-/*
-Snippet-Fu, Copyright (C) 2017, Hariharan Srinath
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(material-icons.woff2) format('woff2');
+  src: url(MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(MaterialIcons-Regular.woff2) format('woff2'),
+       url(MaterialIcons-Regular.woff) format('woff'),
+       url(MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
+  font-size: 24px;  /* Preferred icon size */
   display: inline-block;
-  white-space: nowrap;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
   word-wrap: normal;
+  white-space: nowrap;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+
+  /* Support for all WebKit browsers. */
   -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
