@@ -1,20 +1,21 @@
 Snippet-Fu
 ==========
-Snippet-Fu lets you store and copy frequently used snippets
-of text quickly by copying to clipboard with just one click.
+Snippet-Fu lets you store frequently used snippets
+of text and copy them quickly to clipboard with just one click.
 All data is stored offline in your own computer and absolutely
 nothing is tracked or communicated over the network. 
 
-In analytics, development or even business, we often have to
+In analytics, development, we often have to
 repeatedly re-use long or complicated text like command lines, 
 database connection strings etc. Using ad-hoc solutions like
-text editors or note-taking apps to store these is fidgety
-due to having to select the text to copy to clipboard and
-error-prone due to risk of accidental overtyping.
+text editors or note-taking apps to store these is fidgety and
+error-prone due to having to select & copy text with risk of 
+accidental overtyping.
 
-Snippet-Fu prioritizes simple finding and re-use of text
-by simply clicking on the stored text and has a search
-function to quickly find what you are looking for. Unlike
+Snippet-Fu simplifies this by copying snippets to clipboard 
+by simply clicking on a list. It has a search functionality
+function to quickly find what you are looking for and lets
+you title cryptic snippets to make finding them easier. Unlike
 clipboard managers, it will only keep what you explicitly
 put into it and won't monitor your clipboard.
 
@@ -40,8 +41,10 @@ This project is based on [Electron](http://electron.atom.io/) with
 [Electron Builder](https://www.electron.build/), [React](https://facebook.github.io/react/)
 and [Material Components for Web](https://github.com/material-components/material-components-web-react/). It uses [Create React App](https://github.com/facebookincubator/create-react-app)
 to bootstrap the react components and a modified version of the workflow
-explained in [Kitze's blog]((https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3)
+explained in [Kitze's blog](https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3)
 to integrate CRA with Electron.
+
+- Ensure you have [NodeJS](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) in your development environment
 
 - Clone the repository into a suitable location on the drive
   ```
@@ -60,17 +63,23 @@ to integrate CRA with Electron.
   ```
 
 - To build the packed application, use the following script which calls `electron-builder`
-  and packs executables for Linux, Mac & Windows. The Linux build is well tested, 
-  Windows builds lightly tested & Mac un-tested. Testers & contributors welcome!
+  and packs executables for Linux, Mac & Windows. For more command line options, see
+  the documentation for `electron-builder`
   ```
   yarn electron-pack -mwl
   ```
+  
+Contributing
+------------
+- The Linux build is well tested, Windows builds lightly tested & Mac un-tested. Testers wanted!
+- Issues & pull requests welcome! Version 2 should make reproducible builds much easier. 
 
 Changes from Version 1
 ------------------
 - Integrated workflow between Electron & React
 - New UI library - official React adapters of Material Components for Web
 - Simpler architecture & fewer dependencies - specifically no more use of Redux
+- Search functionality
 
 License
 -------
